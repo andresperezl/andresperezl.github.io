@@ -159,3 +159,9 @@ width: 100%; /* Must be percentage or pixels for horizontal alignment */
 width: 42rem;
 }
 }
+
+.small{
+  color: #777777;
+  text-shadow: none;
+  margin-top: -1rem;
+}
