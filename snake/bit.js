@@ -10,6 +10,7 @@ MAX_WIDTH = (canvas.width / SQUARE_SIZE) | 0
 MAX_HEIGHT = (canvas.height / SQUARE_SIZE) | 0
 MAP_SIZE_TEXT = "Map Size: " + MAX_WIDTH + "x" + MAX_HEIGHT
 MAP_SIZE_TEXT_WIDTH = ctx.measureText(MAP_SIZE_TEXT).width
+TOUCH_SENSIVITY = 7
 snake = new Queue();
 snakeState = "green"
 direction = 'R'
@@ -18,6 +19,9 @@ pause = true
 fruit = new Array(2)
 fruitColor = "yellow"
 speed = 10
+
+prevX=0
+prevY=0
 
 field = new Array(MAX_WIDTH)
 for(i = 0; i < MAX_WIDTH; i++){
@@ -157,10 +161,46 @@ document.onkeydown = function(evt) {
 
     }
 }
+
+canvas.ontouchstart = function(evt) {
+    evt.preventDefault();
+    pause = false
+    prevX = evt.pageX
+    prevY = evt.pageY
+}
+canvas.ontouchend = function(evt) {
+    evt.preventDefault();
+    pause = true
+}
+canvas.ontouchmove = function(evt) {
+    evt.preventDefault();
+    newX = evt.touches[0].pageX
+    newY = evt.touches[0].pageY
+    x = newX - prevX
+    y = newY - prevY
+    if(Math.abs(x) > Math.abs(y)) {
+        if (Math.abs(x) < TOUCH_SENSIVITY) return;
+        if (x < 0 && direction != 'R') {
+            lastDirection = 'L'
+        } else if (direction != 'L') {
+            lastDirection = 'R'
+        }
+    } else {
+        if (Math.abs(y) < TOUCH_SENSIVITY) return;
+        if (y < 0 && direction != 'D') {
+            lastDirection = 'U'
+        } else if (direction != 'U') {
+            lastDirection = 'D'
+        }
+    }
+    prevX = newX
+    prevY = newY
+}
+
 draw()
 ctx.fillStyle = 'white'
 ctx.font = "48px san-serif"
-start_text = "Press SPACE to start playing"
+start_text = "Press SPACE or TOUCH to start playing"
 start_text_width = ctx.measureText(start_text).width
 ctx.fillText(start_text, canvas.width/2 - start_text_width/2, canvas.height/2 - 24)
 gameLoop = setInterval(play, 1000/speed)
