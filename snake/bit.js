@@ -69,12 +69,14 @@ function play(){
     }
     if (element[0] == fruit [0] && element[1] == fruit[1]) {
         placeFruit()
+        snakeState = 'yellow'
     } else {
+        snakeState = 'green'
         tail = snake.dequeue()
         field[tail[0]][tail[1]] = false
     }
     snake.enqueue(element)
-    if (element[0] <= 0 || element[0] >= MAX_WIDTH || element[1] <= 0 || element[1] >= MAX_HEIGHT || field[element[0]][element[1]]) {
+    if (element[0] < 0 || element[0] >= MAX_WIDTH || element[1] < 0 || element[1] >= MAX_HEIGHT || field[element[0]][element[1]]) {
         snakeState = 'red'
         draw()
         clearInterval(gameLoop)
