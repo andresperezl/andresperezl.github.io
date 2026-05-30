@@ -1,75 +1,179 @@
-<!doctype html>
-
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
-
-  <title>Andres Perez</title>
-  <meta name="description" content="Andres Perez">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Andres Perez is a senior software engineer focused on observability and platform systems, based in Toronto, Canada.">
   <meta name="author" content="Andres Perez">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="theme-color" content="#f8f0e3">
+  <script>
+    (() => {
+      const storageKey = "andresperezl-theme";
+      const darkQuery = "(prefers-color-scheme: dark)";
+      const darkPreference = window.matchMedia ? window.matchMedia(darkQuery) : { matches: false };
 
-  <link rel="apple-touch-icon" sizes="57x57" href="/favicon/apple-icon-57x57.png">
-  <link rel="apple-touch-icon" sizes="60x60" href="/favicon/apple-icon-60x60.png">
-  <link rel="apple-touch-icon" sizes="72x72" href="/favicon/apple-icon-72x72.png">
-  <link rel="apple-touch-icon" sizes="76x76" href="/favicon/apple-icon-76x76.png">
-  <link rel="apple-touch-icon" sizes="114x114" href="/favicon/apple-icon-114x114.png">
-  <link rel="apple-touch-icon" sizes="120x120" href="/favicon/apple-icon-120x120.png">
-  <link rel="apple-touch-icon" sizes="144x144" href="/favicon/apple-icon-144x144.png">
-  <link rel="apple-touch-icon" sizes="152x152" href="/favicon/apple-icon-152x152.png">
+      const savedTheme = () => {
+        try {
+          return localStorage.getItem(storageKey);
+        } catch {
+          return null;
+        }
+      };
+
+      const systemTheme = () => darkPreference.matches ? "dark" : "light";
+      const preferredTheme = () => {
+        const theme = savedTheme();
+        return theme === "dark" || theme === "light" ? theme : systemTheme();
+      };
+
+      const setTheme = (theme, persist = false) => {
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.style.colorScheme = theme;
+
+        const themeColor = document.querySelector('meta[name="theme-color"]');
+        if (themeColor) {
+          themeColor.setAttribute("content", theme === "dark" ? "#071311" : "#f8f0e3");
+        }
+
+        const toggle = document.querySelector("[data-theme-toggle]");
+        const label = document.querySelector("[data-theme-label]");
+        const isDark = theme === "dark";
+
+        if (toggle) {
+          toggle.setAttribute("aria-pressed", String(isDark));
+          toggle.setAttribute("aria-label", `Switch to ${isDark ? "light" : "dark"} mode`);
+        }
+
+        if (label) {
+          label.textContent = isDark ? "Light" : "Dark";
+        }
+
+        if (persist) {
+          try {
+            localStorage.setItem(storageKey, theme);
+          } catch {
+            // Ignore unavailable storage.
+          }
+        }
+      };
+
+      setTheme(preferredTheme());
+
+      window.addEventListener("DOMContentLoaded", () => {
+        setTheme(preferredTheme());
+
+        const toggle = document.querySelector("[data-theme-toggle]");
+        if (toggle) {
+          toggle.addEventListener("click", () => {
+            const nextTheme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+            setTheme(nextTheme, true);
+          });
+        }
+
+        const syncSystemTheme = () => {
+          if (!savedTheme()) {
+            setTheme(systemTheme());
+          }
+        };
+
+        if (darkPreference.addEventListener) {
+          darkPreference.addEventListener("change", syncSystemTheme);
+        } else if (darkPreference.addListener) {
+          darkPreference.addListener(syncSystemTheme);
+        }
+      });
+    })();
+  </script>
+
+  <title>Andres Perez | Senior Software Engineer</title>
+
+  <link rel="canonical" href="https://andresperezl.com/">
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-icon-180x180.png">
-  <link rel="icon" type="image/png" sizes="192x192"  href="/favicon/android-icon-192x192.png">
-  <link rel="shortcut icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
-  <link rel="shortcut icon" type="image/png" sizes="96x96" href="/favicon/favicon-96x96.png">
-  <link rel="shortcut icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
   <link rel="manifest" href="/favicon/manifest.json">
-  <meta name="msapplication-TileColor" content="#ffffff">
-  <meta name="msapplication-TileImage" content="/favicon/ms-icon-144x144.png">
-  <meta name="theme-color" content="#ffffff">
 
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Andres Perez | Senior Software Engineer">
+  <meta property="og:description" content="Senior software engineer focused on observability and platform systems, based in Toronto, Canada.">
+  <meta property="og:url" content="https://andresperezl.com/">
+  <meta property="og:image" content="https://andresperezl.com/photo.jpg">
+  <meta name="twitter:card" content="summary_large_image">
 
-  <link rel="stylesheet" href="/bootstrap-flex.min.css">
   <link rel="stylesheet" href="/main.css">
 </head>
-
 <body>
-  <div class="site-wrapper">
-    <div class="site-wrapper-inner">
-      <div class="cover-container">
-        <div class="inner cover">
-          <img src="photo.jpg" class="rounded-circle img-thumbnail mx-auto d-block" />
-          <h1 class="cover-heading">Hello there!</h1>
-          <p class="lead">Bored? Play Snake</p>
-          <p class="lead">
-            <a href="snake/"><img alt="Snake Icon" src="snake.png" /></a>
-            <p class="small">Complete game of Snake on Javascript, everything runs on your browser</span>
-          </p>
-          <p class="lead">Wait? Are you actually here for me?</p>
-          <p class="lead">Check out my public profiles:</p>
-          <div class="container">
-            <div class="row">
-              <a href="https://www.linkedin.com/in/andresperezl" style="color: #0077B5" class="col-xs d-block"><i class="fa fa-5x fa-linkedin-square" aria-hidden="true"></i></a>
-              <a href="https://twitter.com/andresperezl" style="color: #1DA1F2" class="col-xs d-block"><i class="fa fa-5x fa-twitter" aria-hidden="true"></i></a>
-              <a href="https://github.com/andresperezl" style="color: #767676" class="col-xs d-block"><i class="fa fa-5x fa-github" aria-hidden="true"></i></a>
-            </div>
-          </div>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="page-shell">
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Andres Perez home">AP</a>
+      <nav class="nav-links" aria-label="Main">
+        <a href="#work">Work</a>
+        <a href="#links">Links</a>
+        <a href="/snake/">Snake</a>
+      </nav>
+      <button class="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false" data-theme-toggle>
+        <span class="theme-toggle-icon" aria-hidden="true"></span>
+        <span data-theme-label>Dark</span>
+      </button>
+    </header>
+
+    <main id="main">
+      <section class="hero" aria-labelledby="intro-title">
+        <div class="hero-copy">
+          <p class="eyebrow">Toronto, Canada</p>
+          <h1 id="intro-title">Andres Perez builds software that is useful, maintainable, and a little bit personal.</h1>
+          <p class="intro">Senior software engineer at Tanium, with a background in observability and platform systems. Venezuelan-born, Colombian at heart, and living in Canada.</p>
+          <nav class="hero-actions" id="links" aria-label="Public profiles">
+            <a class="button primary" href="https://github.com/andresperezl" rel="me">GitHub</a>
+            <a class="button" href="https://www.linkedin.com/in/andresperezl/" rel="me">LinkedIn</a>
+            <a class="button" href="https://bsky.app/profile/andresperezl.com" rel="me">Bluesky</a>
+            <a class="button" href="https://twitter.com/andresperezl" rel="me">X / Twitter</a>
+          </nav>
         </div>
-        <div class="mastfoot">
-            <div class="inner">
-              <p>
-                Based on the cover template for <a href="https://getbootstrap.com">Bootstrap</a>, by <a href="https://twitter.com/mdo">@mdo</a> |
-                 Check the source code at <a href="https://github.com/andresperezl/andresperezl.github.io">Github</a>.
-              </p>
-              <p><div>Snake icon made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div></p>
-            </div>
+
+        <aside class="profile-card" aria-label="Profile summary">
+          <img src="/photo.jpg" alt="Portrait of Andres Perez" width="300" height="300">
+          <div>
+            <p class="card-label">Observability</p>
+            <p>Monitoring and platform work across Tanium, Ubisoft, and IBM Data &amp; AI, with Go, Kubernetes, and CI/CD.</p>
           </div>
-      </div>
-    </div>
+        </aside>
+      </section>
+
+      <section class="section" id="work" aria-labelledby="work-title">
+        <div class="section-heading">
+          <p class="eyebrow">Selected work</p>
+          <h2 id="work-title">Things worth keeping easy to find.</h2>
+        </div>
+
+        <div class="work-grid">
+          <a class="work-card" href="https://github.com/andresperezl/gobalt">
+            <span class="work-meta">Go client</span>
+            <h3>gobalt</h3>
+            <p>A Go client for the Cobalt tools API.</p>
+          </a>
+
+          <a class="work-card" href="https://github.com/andresperezl/imagestuff">
+            <span class="work-meta">Go library</span>
+            <h3>imagestuff</h3>
+            <p>Image-related utilities packaged as a small Go library.</p>
+          </a>
+
+          <a class="work-card" href="/snake/">
+            <span class="work-meta">Browser game</span>
+            <h3>Snake</h3>
+            <p>A complete Snake game that still runs entirely in the browser.</p>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>&copy; 2026 Andres Perez.</p>
+      <a href="https://github.com/andresperezl/andresperezl.github.io">Source</a>
+    </footer>
   </div>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" integrity="sha384-3ceskX3iaEnIogmQchP8opvBy3Mi7Ce34nWjpBIwVTHfGYWQS9jwHDVRnpKKHJg7" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.7/js/tether.min.js" integrity="sha384-XTs3FgkjiBgo8qjEjBk0tGmf3wPrWtA6coPfQDfFEY8AnYJwjalXCiosYRBIBZX8" crossorigin="anonymous"></script>
-  <script src="/bootstrap.min.js"></script>
-  <script src="https://use.fontawesome.com/8a390fe410.js"></script>
 </body>
 </html>
